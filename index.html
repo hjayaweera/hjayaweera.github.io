@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Hiran H E Jayaweera</title>
+  <meta name="description" content="Hiran H E Jayaweera: optical spectroscopy, multispectral imaging, optical instrumentation, embedded electronics, machine learning, and higher education digitalisation at the University of Colombo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          }
+        }
+      }
+    };
+    (function () {
+      try {
+        var saved = localStorage.getItem('hj-sandstone-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg-primary: #FAF8F4;
+      --bg-secondary: #EFECE4;
+      --bg-card: #FFFFFF;
+      --text-primary: #17231E;
+      --text-muted: #506058;
+      --border-subtle: #DDD7C9;
+      --accent-primary: #1B4D3E;
+      --accent-primary-ink: #FAF8F4;
+      --accent-secondary: #B85D19;
+      --accent-tint: rgba(27, 77, 62, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-primary: #101714;
+      --bg-secondary: #17211C;
+      --bg-card: #1C2822;
+      --text-primary: #ECEAE4;
+      --text-muted: #9EAE9E;
+      --border-subtle: #2A3831;
+      --accent-primary: #63B995;
+      --accent-primary-ink: #101714;
+      --accent-secondary: #E38B4B;
+      --accent-tint: rgba(99, 185, 149, 0.12);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* 3px Optical Spectrum Bar */
+    .spectrum-bar {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, #4C1D95 0%, #1D4ED8 20%, #0D9488 40%, #15803D 58%, #CA8A04 75%, #C2410C 88%, #B91C1C 100%);
+    }
+
+    /* Full-Width Alternating Bands */
+    .band-primary {
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .band-secondary {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Surface Card Styling */
+    .surface-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .surface-card:hover {
+      border-color: var(--accent-primary);
+    }
+
+    /* Navigation Tabs */
+    .nav-tab {
+      color: var(--text-muted);
+      border-radius: 9999px;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .nav-tab:hover {
+      color: var(--text-primary);
+      background-color: var(--accent-tint);
+    }
+    .nav-tab[aria-current="page"] {
+      background-color: var(--accent-primary);
+      color: var(--accent-primary-ink);
+      font-weight: 600;
+    }
+
+    /* Filter Pills */
+    .filter-pill {
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-card);
+      color: var(--text-muted);
+      border-radius: 9999px;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+    .filter-pill:hover {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+    }
+    .filter-pill.active {
+      background-color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary-ink);
+      font-weight: 600;
+    }
+
+    /* Hash Page Views */
+    .page-view {
+      display: none;
+    }
+    .page-view.active {
+      display: block;
+      animation: fadeSlide 0.24s ease-out;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Code Badge */
+    .code-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      background-color: var(--accent-tint);
+      color: var(--accent-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Toast Notification */
+    .toast-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 60;
+      background-color: var(--accent-primary);
+      color: var(--accent-primary-ink);
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .toast-banner.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Scrollbar for horizontal nav on small screens */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, system-ui, -apple-system, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.sticky{position:sticky}.top-0{top:0px}.z-40{z-index:40}.order-2{order:2}.order-3{order:3}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-2{height:0.5rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-2{width:0.5rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-6xl{max-width:72rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-10 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.self-start{align-self:flex-start}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.font-display{font-family:"Plus Jakarta Sans", Inter, system-ui, sans-serif}.font-mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-\[1\.12\]{line-height:1.12}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-90:hover{opacity:0.9}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-end{align-items:flex-end}.sm\:items-center{align-items:center}.sm\:self-center{align-self:center}.sm\:p-6{padding:1.5rem}.sm\:p-7{padding:1.75rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-16{padding-top:4rem;padding-bottom:4rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-end{align-items:flex-end}}@media (min-width: 1024px){.lg\:order-2{order:2}.lg\:order-3{order:3}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:w-auto{width:auto}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:gap-12{gap:3rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:py-20{padding-top:5rem;padding-bottom:5rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, system-ui, -apple-system, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-40{z-index:40}.order-2{order:2}.order-3{order:3}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-2{height:0.5rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-2{width:0.5rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-6xl{max-width:72rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-10 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.self-start{align-self:flex-start}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.font-display{font-family:"Plus Jakarta Sans", Inter, system-ui, sans-serif}.font-mono{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-\[1\.12\]{line-height:1.12}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-90:hover{opacity:0.9}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-end{align-items:flex-end}.sm\:items-center{align-items:center}.sm\:self-center{align-self:center}.sm\:p-6{padding:1.5rem}.sm\:p-7{padding:1.75rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-16{padding-top:4rem;padding-bottom:4rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-end{align-items:flex-end}}@media (min-width: 1024px){.lg\:order-2{order:2}.lg\:order-3{order:3}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:w-auto{width:auto}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:gap-12{gap:3rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:py-20{padding-top:5rem;padding-bottom:5rem}}</style></head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-md" style="background-color: color-mix(in srgb, var(--bg-primary) 92%, transparent); border-bottom: 1px solid var(--border-subtle);">
+    <div class="spectrum-bar" aria-hidden="true"></div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <a href="#overview" class="flex items-center gap-3 group focus:outline-none">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center font-display font-bold text-base tracking-tight transition-transform group-hover:scale-105" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">
+          HJ
+        </div>
+        <div>
+          <span class="block font-display font-bold text-base sm:text-lg tracking-tight leading-tight" style="color: var(--text-primary);">Hiran H E Jayaweera</span>
+          <span class="block font-mono text-[11px] uppercase tracking-wider" style="color: var(--text-muted);">Optics · Electronics · Education · Digitalisation</span>
+        </div>
+      </a>
+
+      <!-- Multi-Page Navigation -->
+      <nav aria-label="Primary Navigation" class="order-3 lg:order-2 w-full lg:w-auto flex items-center gap-1 overflow-x-auto no-scrollbar py-1">
+        <a href="#overview" class="nav-tab px-3.5 py-2 text-sm font-medium">Overview</a>
+        <a href="#research" class="nav-tab px-3.5 py-2 text-sm font-medium">Research</a>
+        <a href="#teaching" class="nav-tab px-3.5 py-2 text-sm font-medium">Teaching</a>
+        <a href="#leadership" class="nav-tab px-3.5 py-2 text-sm font-medium">Leadership</a>
+        <a href="#awards" class="nav-tab px-3.5 py-2 text-sm font-medium">Awards &amp; Contact</a>
+      </nav>
+
+      <!-- Utility Controls -->
+      <div class="order-2 lg:order-3 flex items-center gap-2">
+        <button type="button" id="theme-toggle" class="px-3 py-2 rounded-xl text-xs font-medium border transition-colors cursor-pointer flex items-center gap-1.5" style="background-color: var(--bg-card); border-color: var(--border-subtle); color: var(--text-primary);" aria-label="Toggle Evening Forest dark mode">
+          <span id="theme-icon" aria-hidden="true">◐</span>
+          <span id="theme-label">Dark</span>
+        </button>
+       
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1">
+
+    <!-- ===================================================================
+         PAGE 1: OVERVIEW (#overview)
+    =================================================================== -->
+    <section id="page-overview" class="page-view" data-title="Overview">
+      <!-- Band 1: Hero & Credentials -->
+      <div class="band-primary py-12 sm:py-16 lg:py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <div class="lg:col-span-7 space-y-6">
+              <h1 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-[1.12]" style="color: var(--text-primary);">
+                Hiran H E Jayaweera
+              </h1>
+              <p class="text-base sm:text-lg leading-relaxed" style="color: var(--text-muted);">
+                I am a physicist working on optical spectroscopy, multispectral imaging, optical instrumentation, embedded electronics, and machine learning, and on the digital systems that support higher education. Alongside experimental physics and instrumentation development, I lead digitalisation and open and distance learning initiatives.
+              </p>
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <a href="#research" class="px-5 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">
+                  Explore Research
+                </a>
+                <a href="https://scholar.google.com/citations?user=tt4CSjgAAAAJ" target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded-xl text-sm font-semibold border transition-colors" style="background-color: var(--bg-card); border-color: var(--border-subtle); color: var(--text-primary);">
+                  Google Scholar ↗
+                </a>
+                <a href="#awards" class="px-5 py-3 rounded-xl text-sm font-semibold border transition-colors" style="background-color: transparent; border-color: var(--border-subtle); color: var(--text-primary);">
+                  Contact
+                </a>
+              </div>
+            </div>
+
+            <!-- Affiliation & Credentials Card -->
+            <div class="lg:col-span-5">
+              <div class="surface-card p-6 sm:p-7 space-y-5">
+                <div class="flex items-center justify-between border-b pb-4" style="border-color: var(--border-subtle);">
+                  <div>
+                    <span class="font-mono text-xs uppercase tracking-wider font-semibold" style="color: var(--accent-secondary);">Affiliation &amp; Credentials</span>
+                    <h2 class="font-display font-bold text-lg mt-0.5" style="color: var(--text-primary);">Department of Physics</h2>
+                    <p class="text-sm" style="color: var(--text-muted);">University of Colombo, Sri Lanka</p>
+                  </div>
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center font-mono text-xs font-bold" style="background-color: var(--accent-tint); color: var(--accent-primary);">
+                    UoC
+                  </div>
+                </div>
+
+                <ul class="space-y-3.5 text-sm">
+                  <li class="flex items-start justify-between gap-3">
+                    <div>
+                      <span class="font-semibold block" style="color: var(--text-primary);">PhD in Optical Spectroscopy and Multispectral Imaging</span>
+                      <span style="color: var(--text-muted);">University of Colombo</span>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background-color: var(--bg-secondary); color: var(--text-primary);">2015</span>
+                  </li>
+                  <li class="flex items-start justify-between gap-3">
+                    <div>
+                      <span class="font-semibold block" style="color: var(--text-primary);">BSc (Hons) in Physics — First Class</span>
+                      <span style="color: var(--text-muted);">University of Colombo</span>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background-color: var(--bg-secondary); color: var(--text-primary);">2004</span>
+                  </li>
+                  <li class="flex items-start justify-between gap-3">
+                    <div>
+                      <span class="font-semibold block" style="color: var(--text-primary);">CTHE &amp; SEDA (UK) Accredited Portfolio</span>
+                      <span style="color: var(--text-muted);">Staff and Educational Development Association, UK</span>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background-color: var(--bg-secondary); color: var(--text-primary);">2009</span>
+                  </li>
+                  <li class="flex items-start justify-between gap-3">
+                    <div>
+                      <span class="font-semibold block" style="color: var(--text-primary);">Blended Learning Training</span>
+                      <span style="color: var(--text-muted);">International Institute of Online Education (IIOE)</span>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background-color: var(--bg-secondary); color: var(--text-primary);">2020</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 2: 01 / Capabilities — Skills & Core Competencies -->
+      <div class="band-secondary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">01 / Capabilities</span>
+              <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1" style="color: var(--text-primary);">Skills &amp; Core Competencies</h2>
+              <p class="text-sm sm:text-base mt-2 max-w-2xl" style="color: var(--text-muted);">
+                Multidisciplinary expertise spanning optical hardware engineering, embedded edge intelligence, laboratory pedagogy, and enterprise university digitalisation.
+              </p>
+            </div>
+
+            <!-- Interactive Skill Category Filter -->
+            <div class="flex flex-wrap gap-2" role="group" aria-label="Filter skills by domain">
+              <button type="button" class="filter-pill skill-filter active px-3.5 py-1.5 text-xs font-medium" data-skill-cat="all">All (8)</button>
+              <button type="button" class="filter-pill skill-filter px-3.5 py-1.5 text-xs font-medium" data-skill-cat="hardware">Hardware &amp; Optics</button>
+              <button type="button" class="filter-pill skill-filter px-3.5 py-1.5 text-xs font-medium" data-skill-cat="computing">Computing &amp; AI</button>
+              <button type="button" class="filter-pill skill-filter px-3.5 py-1.5 text-xs font-medium" data-skill-cat="education">Education &amp; Digitalisation</button>
+            </div>
+          </div>
+
+          <div id="skills-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Skill 1 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="computing">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Computing &amp; AI</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">01</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Programming</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Scientific computing, multivariate spectral data analysis, parallel programming, and open-source software architecture across Python, C/C++, MATLAB, and web stacks.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                ICTP HPC &amp; Scientific Programming
+              </div>
+            </article>
+
+            <!-- Skill 2 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="computing">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Computing &amp; AI</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">02</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Edge Computing</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Deploying quantized machine learning and spectral classification models directly onto low-power portable hardware for real-time field diagnostics and food authentication.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                Edge-AI Portable Spectroscopy
+              </div>
+            </article>
+
+            <!-- Skill 3 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="hardware">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Hardware &amp; Optics</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">03</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Embedded Systems</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Microcontroller, microprocessor, and FPGA firmware engineering, custom PCB design, sensor-transducer interfacing, and delay-tolerant wireless sensor networks.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                Firmware · FPGAs · Sensor Nodes
+              </div>
+            </article>
+
+            <!-- Skill 4 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="hardware">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Hardware &amp; Optics</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">04</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Optical Instrumentation</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Design and calibration of budget Raman spectrometers, LED multispectral imaging systems, fluorescence sensors, and active/passive optical remote sensing platforms.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                Raman · Fluorescence · Multispectral
+              </div>
+            </article>
+
+            <!-- Skill 5 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="education">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Education</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">05</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Laboratory Course Design</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Structuring SEDA-accredited, learner-centred undergraduate and postgraduate laboratory curricula in electronics, microcontrollers, robotics, and engineering physics.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                SEDA (UK) Accredited Pedagogy
+              </div>
+            </article>
+
+            <!-- Skill 6 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="computing">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Computing &amp; AI</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">06</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">AI Usage Training</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Leading national and institutional workshops on effective, ethical, and pedagogical integration of AI tools for secondary teachers, university academics, and staff.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                CQA &amp; ICCMM 2026 Resource Lead
+              </div>
+            </article>
+
+            <!-- Skill 7 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="education">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Digitalisation</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">07</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Digitalisation</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Enterprise campus networking, IT service governance, LMS administration, NFC smart ID ecosystems, and open and distance learning transformation at the University of Colombo.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                NOC · ITSC · CODL · UoC One
+              </div>
+            </article>
+
+            <!-- Skill 8 -->
+            <article class="surface-card p-5 flex flex-col justify-between skill-card" data-cat="education">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">Digitalisation</span>
+                  <span class="font-mono text-xs" style="color: var(--text-muted);">08</span>
+                </div>
+                <h3 class="font-display font-bold text-lg mb-2" style="color: var(--text-primary);">Software Development</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Founding and leading student-staff engineering teams building multi-faculty Student Information Systems, Faculty Management Systems, mobile apps, and museum archives.
+                </p>
+              </div>
+              <div class="mt-4 pt-3 border-t font-mono text-[11px]" style="border-color: var(--border-subtle); color: var(--accent-secondary);">
+                SIS · FMS · Connect AHEAD
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 2: RESEARCH (#research)
+    =================================================================== -->
+    <section id="page-research" class="page-view" data-title="Research">
+      <!-- Band 1: Research Overview & Active Projects -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">01 / Scientific Inquiry</span>
+          <h1 class="font-display font-extrabold text-3xl sm:text-4xl tracking-tight mt-1 mb-4" style="color: var(--text-primary);">Research &amp; Instrumentation</h1>
+          <p class="text-base sm:text-lg max-w-3xl leading-relaxed mb-8" style="color: var(--text-muted);">
+            Developing accessible optical instruments, spectral classification models, and low-power embedded sensing systems for food authentication, healthcare diagnostics, environmental monitoring, and renewable energy.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Core Research Interests -->
+            <div class="surface-card p-6 sm:p-7">
+              <h2 class="font-display font-bold text-xl mb-4" style="color: var(--text-primary);">Core Research Interests</h2>
+              <ul class="space-y-3.5 text-sm sm:text-base" style="color: var(--text-muted);">
+                <li class="flex items-start gap-3">
+                  <span class="w-2 h-2 rounded-full mt-2 shrink-0" style="background-color: var(--accent-primary);"></span>
+                  <span><strong style="color: var(--text-primary);">Optical Instrumentation:</strong> Raman and fluorescence spectroscopy, multispectral imaging, and optical remote sensing platforms.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-2 h-2 rounded-full mt-2 shrink-0" style="background-color: var(--accent-primary);"></span>
+                  <span><strong style="color: var(--text-primary);">Machine Learning &amp; Edge-AI:</strong> Multivariate analysis and embedded neural models for non-invasive spectroscopy and medical diagnostics.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="w-2 h-2 rounded-full mt-2 shrink-0" style="background-color: var(--accent-primary);"></span>
+                  <span><strong style="color: var(--text-primary);">Embedded Systems &amp; Sensing:</strong> Distributed wireless sensor networks, autonomous telemetry nodes, and bio-aerosol detection.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Current Research Projects -->
+            <div class="surface-card p-6 sm:p-7">
+              <h2 class="font-display font-bold text-xl mb-4" style="color: var(--text-primary);">Current Research Projects</h2>
+              <ul class="space-y-3.5 text-sm sm:text-base" style="color: var(--text-muted);">
+                <li class="flex items-start gap-3">
+                  <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded mt-0.5 shrink-0" style="background-color: var(--accent-tint); color: var(--accent-primary);">01</span>
+                  <span>Machine learning approaches to commodity classification based on Raman and Fluorescence Spectroscopy</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded mt-0.5 shrink-0" style="background-color: var(--accent-tint); color: var(--accent-primary);">02</span>
+                  <span>Delay-tolerant ad hoc sensor network-based environment monitoring</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded mt-0.5 shrink-0" style="background-color: var(--accent-tint); color: var(--accent-primary);">03</span>
+                  <span>Remote sensing of bio-aerosols</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 2: Publications & Citation Record (Minimal: Button + Scholar ID Only) -->
+      <div class="band-secondary py-10 sm:py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="surface-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div>
+              <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">02 / Scholarly Index</span>
+              <h2 class="font-display font-bold text-xl sm:text-2xl mt-1" style="color: var(--text-primary);">Publications &amp; Citation Record</h2>
+              <p class="font-mono text-xs sm:text-sm mt-1.5" style="color: var(--text-muted);">
+                Scholar ID: <span style="color: var(--text-primary); font-weight: 600;">tt4CSjgAAAAJ</span>
+              </p>
+            </div>
+            <div class="shrink-0">
+              <a href="https://scholar.google.com/citations?user=tt4CSjgAAAAJ" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">
+                <span>View Google Scholar Profile</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 3: Research Grants -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">03 / Competitive Funding</span>
+              <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1" style="color: var(--text-primary);">Research Grants</h2>
+            </div>
+
+            <!-- Interactive Role Filter -->
+            <div class="flex flex-wrap gap-2" role="group" aria-label="Filter research grants by role">
+              <button type="button" class="filter-pill grant-filter active px-3.5 py-1.5 text-xs font-medium" data-grant-role="all">All Grants (5)</button>
+              <button type="button" class="filter-pill grant-filter px-3.5 py-1.5 text-xs font-medium" data-grant-role="pi">Principal Investigator (1)</button>
+              <button type="button" class="filter-pill grant-filter px-3.5 py-1.5 text-xs font-medium" data-grant-role="co-pi">Co-Investigator (4)</button>
+            </div>
+          </div>
+
+          <div id="grants-list" class="space-y-4">
+            <!-- Grant 1 -->
+            <div class="surface-card p-5 sm:p-6 grant-item" data-role="co-pi">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">2026</span>
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--bg-secondary); color: var(--text-primary);">Co-Investigator</span>
+                </div>
+                <span class="font-mono text-sm font-bold" style="color: var(--accent-secondary);">3.00 Million LKR</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg" style="color: var(--text-primary);">
+                Identification of early-stage gallbladder stones using the non-invasive method
+              </h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">
+                National Science Foundation (NSF) · Principal Investigator: Dr Prabath Liayanage
+              </p>
+            </div>
+
+            <!-- Grant 2 -->
+            <div class="surface-card p-5 sm:p-6 grant-item" data-role="co-pi">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">2026</span>
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--bg-secondary); color: var(--text-primary);">Co-Investigator</span>
+                </div>
+                <span class="font-mono text-sm font-bold" style="color: var(--accent-secondary);">3.00 Million LKR</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg" style="color: var(--text-primary);">
+                Development of a non-contact multispectral imaging-based method for postharvest fruit quality testing
+              </h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">
+                National Science Foundation (NSF) · Principal Investigator: Dr Monika Madhavi
+              </p>
+            </div>
+
+            <!-- Grant 3 -->
+            <div class="surface-card p-5 sm:p-6 grant-item" data-role="co-pi">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">2019</span>
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--bg-secondary); color: var(--text-primary);">Co-Investigator</span>
+                </div>
+                <span class="font-mono text-sm font-bold" style="color: var(--accent-secondary);">40.00 Million LKR</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg" style="color: var(--text-primary);">
+                Development of a Raman spectroscopy facility for biofluid-based disease diagnostics with an application for early-stage detection of CKD
+              </h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">
+                AHEAD Development Oriented Grant · Principal Investigator: Dr Siyath Gunewardene
+              </p>
+            </div>
+
+            <!-- Grant 4 -->
+            <div class="surface-card p-5 sm:p-6 grant-item" data-role="pi">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">2016</span>
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">Principal Investigator</span>
+                </div>
+                <span class="font-mono text-sm font-bold" style="color: var(--accent-secondary);">2.97 Million LKR</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg" style="color: var(--text-primary);">
+                Development of methodologies for the quantitative analysis of medical images for the early-stage detection of chronic kidney disease
+              </h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">
+                Collaborative Research Grant, University of Colombo · PI: H H E Jayaweera
+              </p>
+            </div>
+
+            <!-- Grant 5 -->
+            <div class="surface-card p-5 sm:p-6 grant-item" data-role="co-pi">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">2012</span>
+                  <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded-md" style="background-color: var(--bg-secondary); color: var(--text-primary);">Co-Investigator</span>
+                </div>
+                <span class="font-mono text-sm font-bold" style="color: var(--accent-secondary);">3.00 Million LKR</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg" style="color: var(--text-primary);">
+                Construction and evaluation of a linear parabolic trough solar concentrator (PTC), and optimization of the system for industrial and domestic applications
+              </h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">
+                Collaborative Research Grant, University of Colombo · Principal Investigator: Prof. TR Ariyaratne
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 4: Research Degree Supervision -->
+      <div class="band-secondary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">04 / Mentorship</span>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1 mb-8" style="color: var(--text-primary);">Research Degree Supervision</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="surface-card p-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">PhD · 2025</span>
+                <span class="font-mono text-xs" style="color: var(--text-muted);">AN Pattividana</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg mb-2" style="color: var(--text-primary);">
+                Optimization of embedded hardware and firmware for food quality testing using Edge-AI driven portable Fluorescence Spectroscopy
+              </h3>
+              <p class="text-xs sm:text-sm" style="color: var(--text-muted);">
+                Supervisors: HHE Jayaweera, MK Jayananda, and MS Gunewardene
+              </p>
+            </div>
+
+            <div class="surface-card p-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">MPhil · 2022</span>
+                <span class="font-mono text-xs" style="color: var(--text-muted);">MPS Viraj</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg mb-2" style="color: var(--text-primary);">
+                Development and optimization of a thermal energy storage system and the heat collecting element of a parabolic trough concentrator solar thermal energy plant
+              </h3>
+              <p class="text-xs sm:text-sm" style="color: var(--text-muted);">
+                Supervisors: HHE Jayaweera and TR Ariyaratne
+              </p>
+            </div>
+
+            <div class="surface-card p-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-tint); color: var(--accent-primary);">MPhil · 2020</span>
+                <span class="font-mono text-xs" style="color: var(--text-muted);">Dulith Hewawasama</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg mb-2" style="color: var(--text-primary);">
+                Novel ultrasound imaging parameters to quantify Chronic Kidney Disease (CKD/CKDu)
+              </h3>
+              <p class="text-xs sm:text-sm" style="color: var(--text-muted);">
+                Supervisors: JP Wansapura and HHE Jayaweera
+              </p>
+            </div>
+
+            <div class="surface-card p-6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">PhD · 2019</span>
+                <span class="font-mono text-xs" style="color: var(--text-muted);">PDC Kumara</span>
+              </div>
+              <h3 class="font-display font-bold text-base sm:text-lg mb-2" style="color: var(--text-primary);">
+                Development of a solar thermal energy harnessing system for engineering applications
+              </h3>
+              <p class="text-xs sm:text-sm" style="color: var(--text-muted);">
+                Supervisors: TR Ariyaratne, HHE Jayaweera, and AM Mushathik
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 3: TEACHING (#teaching)
+    =================================================================== -->
+    <section id="page-teaching" class="page-view" data-title="Teaching">
+      <!-- Band 1: Teaching Themes -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">01 / Curriculum &amp; Pedagogy</span>
+          <h1 class="font-display font-extrabold text-3xl sm:text-4xl tracking-tight mt-1 mb-4" style="color: var(--text-primary);">Teaching Themes</h1>
+          <p class="text-base sm:text-lg max-w-3xl leading-relaxed mb-6" style="color: var(--text-muted);">
+            Across undergraduate and postgraduate programmes, my teaching spans face-to-face lectures, blended learning modules, and hands-on laboratory courses organized across five thematic pillars.
+          </p>
+
+          <!-- Interactive Theme Filter -->
+          <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter teaching themes">
+            <button type="button" class="filter-pill theme-filter active px-3.5 py-1.5 text-xs font-medium" data-theme-cat="all">All Themes (5)</button>
+            <button type="button" class="filter-pill theme-filter px-3.5 py-1.5 text-xs font-medium" data-theme-cat="optics">Optics &amp; Imaging</button>
+            <button type="button" class="filter-pill theme-filter px-3.5 py-1.5 text-xs font-medium" data-theme-cat="electronics">Electronics &amp; Simulation</button>
+            <button type="button" class="filter-pill theme-filter px-3.5 py-1.5 text-xs font-medium" data-theme-cat="embedded">Embedded &amp; Instrumentation</button>
+            <button type="button" class="filter-pill theme-filter px-3.5 py-1.5 text-xs font-medium" data-theme-cat="computing">Programming &amp; Architecture</button>
+            <button type="button" class="filter-pill theme-filter px-3.5 py-1.5 text-xs font-medium" data-theme-cat="automation">Robotics &amp; EdTech</button>
+          </div>
+
+          <div class="space-y-5">
+            <!-- Theme 1 -->
+            <div class="surface-card p-6 theme-card" data-theme-group="optics">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="font-display font-bold text-lg sm:text-xl" style="color: var(--text-primary);">
+                  1. Optics, Photonics &amp; Digital Image Processing
+                </h2>
+                <span class="font-mono text-xs" style="color: var(--accent-secondary);">4 Courses</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="code-chip"><strong>PH 1001</strong> Modern Optics</span>
+                <span class="code-chip"><strong>PH 4010</strong> Advanced Optics (Lasers and Fibres)</span>
+                <span class="code-chip"><strong>PH 3034</strong> Digital Image Processing</span>
+                <span class="code-chip"><strong>PH 1004</strong> Thermodynamics</span>
+              </div>
+            </div>
+
+            <!-- Theme 2 -->
+            <div class="surface-card p-6 theme-card" data-theme-group="electronics">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="font-display font-bold text-lg sm:text-xl" style="color: var(--text-primary);">
+                  2. Analogue, Digital Electronics &amp; Circuit Simulation
+                </h2>
+                <span class="font-mono text-xs" style="color: var(--accent-secondary);">9 Courses</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="code-chip"><strong>AE 1101</strong> Analogue Electronics 1</span>
+                <span class="code-chip"><strong>AE 2102</strong> Analogue Electronics II</span>
+                <span class="code-chip"><strong>AE 1030</strong> Analogue Electronics Laboratory</span>
+                <span class="code-chip"><strong>AE 1031</strong> Digital Electronics Laboratory</span>
+                <span class="code-chip"><strong>AE 1102</strong> Electronics Circuit Simulation</span>
+                <span class="code-chip"><strong>SCS 2006</strong> Analogue and Digital Electronics</span>
+                <span class="code-chip"><strong>C 11082</strong> Analog &amp; Digital Electronics for Chemists</span>
+                <span class="code-chip"><strong>ML 1122</strong> Basics Physics, Electronics and Instrumentation</span>
+                <span class="code-chip"><strong>MEL 5104</strong> Circuit Simulation and Modeling (PG)</span>
+              </div>
+            </div>
+
+            <!-- Theme 3 -->
+            <div class="surface-card p-6 theme-card" data-theme-group="embedded">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="font-display font-bold text-lg sm:text-xl" style="color: var(--text-primary);">
+                  3. Microcontrollers, Embedded Systems &amp; Instrumentation
+                </h2>
+                <span class="font-mono text-xs" style="color: var(--accent-secondary);">9 Courses</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="code-chip"><strong>PH 3010</strong> Microcontrollers and Embedded Systems</span>
+                <span class="code-chip"><strong>PH 3032</strong> Embedded System Laboratory</span>
+                <span class="code-chip"><strong>AE 2020</strong> Microcontroller Laboratory</span>
+                <span class="code-chip"><strong>AE 2030</strong> Instrumentation Laboratory</span>
+                <span class="code-chip"><strong>AE 2031</strong> Data Acquisition Laboratory</span>
+                <span class="code-chip"><strong>PH 3030</strong> Advanced Physics Laboratory</span>
+                <span class="code-chip"><strong>PH 4032</strong> Engineering Physics Laboratory</span>
+                <span class="code-chip"><strong>MEL 5201</strong> Sensors, Transducers and Data Acquisition (PG)</span>
+                <span class="code-chip"><strong>MEL 5204</strong> Microprocessors, Microcontrollers and FPGAs (PG)</span>
+              </div>
+            </div>
+
+            <!-- Theme 4 -->
+            <div class="surface-card p-6 theme-card" data-theme-group="computing">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="font-display font-bold text-lg sm:text-xl" style="color: var(--text-primary);">
+                  4. Programming, Computer Architecture &amp; Mobile Apps
+                </h2>
+                <span class="font-mono text-xs" style="color: var(--accent-secondary);">5 Courses</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="code-chip"><strong>AE 1004</strong> Introduction to Programming</span>
+                <span class="code-chip"><strong>CS 1101</strong> Fundamentals of Programming</span>
+                <span class="code-chip"><strong>AE 2102</strong> Computer Architecture</span>
+                <span class="code-chip"><strong>AE 2004</strong> Computer Architecture II</span>
+                <span class="code-chip"><strong>PH 3037</strong> Mobile Application Development</span>
+              </div>
+            </div>
+
+            <!-- Theme 5 -->
+            <div class="surface-card p-6 theme-card" data-theme-group="automation">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="font-display font-bold text-lg sm:text-xl" style="color: var(--text-primary);">
+                  5. Robotics, Industrial Automation &amp; Technology-Enabled Learning
+                </h2>
+                <span class="font-mono text-xs" style="color: var(--accent-secondary);">4 Courses</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="code-chip"><strong>PH 3043</strong> Robotics and Automation</span>
+                <span class="code-chip"><strong>PH 4019</strong> Industrial Automation</span>
+                <span class="code-chip"><strong>MPE 5717</strong> Electronics and Automation Laboratory (PG)</span>
+                <span class="code-chip"><strong>MCE 5502</strong> Technology Enabled Learning (PG)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 2: Workshops & Training Programs -->
+      <div class="band-secondary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">02 / Capacity Building</span>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1 mb-8" style="color: var(--text-primary);">Workshops &amp; Training Programs</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="surface-card p-6 sm:p-7">
+              <h3 class="font-display font-bold text-lg mb-4" style="color: var(--text-primary);">As Resource Personnel</h3>
+              <ul class="space-y-3 text-sm" style="color: var(--text-muted);">
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2026</span>
+                  <span>AI training workshop for Advanced Level Science and Mathematics teachers on Teaching, Learning, and Assessment (ICCMM 2026)</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2026</span>
+                  <span>AI training workshops for academic and non-academic staff of the University of Colombo on effective and ethical use of AI (organized by CQA)</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2020–21</span>
+                  <span>Workshops on virtual platforms for blended learning, Moodle LMS, and modern learner-centred assessment (AHEAD ELTA-ELSE, University of Colombo, Uva Wellassa University, Sabaragamuwa University)</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2018–19</span>
+                  <span>Lecturer, AFSIN Doctoral Summer Schools (Yamoussoukro, Côte d’Ivoire; Cape Coast, Ghana)</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2010–19</span>
+                  <span>International workshops on optical spectroscopy, multispectral imaging microscopy, remote sensing, and multivariate analysis in Ghana, Côte d’Ivoire, Kenya, and Mali</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="surface-card p-6 sm:p-7">
+              <h3 class="font-display font-bold text-lg mb-4" style="color: var(--text-primary);">Selected Training Attended</h3>
+              <ul class="space-y-3 text-sm" style="color: var(--text-muted);">
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2023</span>
+                  <span>Workshop on Scientific Use of Machine Learning on Low-Power Devices: Applications and Advanced Topics — Abdus Salam ICTP, Trieste, Italy</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2017</span>
+                  <span>5th Workshop on Advanced Techniques for Scientific Programming and Management of Open-Source Software — Sharif University of Technology, Tehran, Iran</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2016</span>
+                  <span>Introductory School on Parallel Programming and Parallel Architecture for High-Performance Computing — Abdus Salam ICTP, Trieste, Italy</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="font-mono text-xs font-semibold mt-0.5" style="color: var(--accent-primary);">2012</span>
+                  <span>Hands-On Research School in Complex Systems — Shanghai Jiao Tong University (SJTU), China</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 4: LEADERSHIP (#leadership)
+    =================================================================== -->
+    <section id="page-leadership" class="page-view" data-title="Leadership">
+      <!-- Band 1: Academic Career Timeline -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">01 / Academic Trajectory</span>
+          <h1 class="font-display font-extrabold text-3xl sm:text-4xl tracking-tight mt-1 mb-8" style="color: var(--text-primary);">Career &amp; Institutional Leadership</h1>
+
+          <div class="space-y-4">
+            <div class="surface-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-lg" style="color: var(--text-primary);">Professor in Physics</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Department of Physics, University of Colombo, Sri Lanka</p>
+              </div>
+              <span class="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">June 2023 – Present</span>
+            </div>
+
+            <div class="surface-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-lg" style="color: var(--text-primary);">Senior Lecturer</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Department of Physics, University of Colombo, Sri Lanka</p>
+              </div>
+              <span class="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center" style="background-color: var(--accent-tint); color: var(--accent-primary);">Jan 2015 – May 2023</span>
+            </div>
+
+            <div class="surface-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-lg" style="color: var(--text-primary);">Probationary Lecturer</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Department of Physics, University of Colombo, Sri Lanka</p>
+              </div>
+              <span class="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center" style="background-color: var(--accent-tint); color: var(--accent-primary);">Feb 2007 – Dec 2014</span>
+            </div>
+
+            <div class="surface-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-lg" style="color: var(--text-primary);">International Research Fellowships &amp; Internships</h2>
+                <p class="text-sm" style="color: var(--text-muted);">ISP &amp; EURECA Fellowships, Atomic Physics Division, Lund University, Sweden (2006, 2009, 2010) · IESTA Internship, Itho Group, Keio University, Japan (2009)</p>
+              </div>
+              <span class="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center" style="background-color: var(--bg-secondary); color: var(--text-primary);">2006 – 2010</span>
+            </div>
+
+            <div class="surface-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-lg" style="color: var(--text-primary);">Early Academic &amp; Visiting Appointments</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Temporary Research Assistant (Centre for Instrument Development), Assistant Lecturer &amp; Demonstrator, UoC (2004–2007) · Visiting Lecturer, Institute of Chemistry Ceylon &amp; Kotelawala Defence University (2017–2022)</p>
+              </div>
+              <span class="font-mono text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center" style="background-color: var(--bg-secondary); color: var(--text-primary);">2004 – 2022</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 2: University & National Leadership -->
+      <div class="band-secondary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">02 / Governance &amp; Administration</span>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1 mb-8" style="color: var(--text-primary);">University &amp; National Leadership</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">May 2026 – Present</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Acting Deputy Director (Training)</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">Centre for Open Distance Learning (CODL), University of Colombo</p>
+            </div>
+
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">August 2022 – August 2026</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Director — Network Operations Centre (NOC)</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">University of Colombo</p>
+            </div>
+
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">December 2022 – Present</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Founding Director — IT Service Centre (ITSC)</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">Faculty of Science, University of Colombo</p>
+            </div>
+
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">University Digitalization</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Management &amp; Technical Team Member</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">Uni of Colombo One Digitalization Project</p>
+            </div>
+
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">2015 – Present</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Program Coordinator &amp; Study Board Chair</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">BSc (External) in Electronics and Automation Technologies, Department of Physics, University of Colombo (Coordinator since 2021; Study Board Chair 2020–2024)</p>
+            </div>
+
+            <div class="surface-card p-5">
+              <span class="font-mono text-xs font-semibold" style="color: var(--accent-secondary);">Academic Coordination &amp; Societies</span>
+              <h3 class="font-display font-bold text-base mt-1" style="color: var(--text-primary);">Degree Coordinator &amp; IPSL Secretary</h3>
+              <p class="text-sm mt-1" style="color: var(--text-muted);">Coordinator for BSc Honours in IT &amp; Electronics (2016–2020) and MSc in Applied Electronics (2015, 2017, 2019); Secretary (2016/2017) &amp; Co-Editor (2015/2016), Institute of Physics, Sri Lanka</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 3: Software Engineering, Media & Professional Memberships -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div>
+            <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">03 / Digital Platforms &amp; Networks</span>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight mt-1 mb-6" style="color: var(--text-primary);">Software Engineering, Media &amp; International Networks</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="surface-card p-6">
+                <h3 class="font-display font-bold text-base mb-2" style="color: var(--text-primary);">Faculty of Science Software Development Team (2009 – Present)</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Founder &amp; Team Leader: led development of the multi-faculty Undergraduate Student Information System (SIS), Faculty Management System (FMS), NFC ID card system, MPhil/PhD student tracking system, Natural History Museum digitisation software, and Sci-Mobile app.
+                </p>
+              </div>
+
+              <div class="surface-card p-6">
+                <h3 class="font-display font-bold text-base mb-2" style="color: var(--text-primary);">FOSmedia &amp; Digital Campus Infrastructure (2009 – Present)</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Founder &amp; Team Leader of FOSmedia (FOcuS, FOS tv, FOS bloggers, UoC Rhythm web radio), founder of the Embedded System Blog, Faculty LMS Administrator, and Webmaster for the Faculty of Science (2016 – Present).
+                </p>
+              </div>
+
+              <div class="surface-card p-6">
+                <h3 class="font-display font-bold text-base mb-2" style="color: var(--text-primary);">African Spectral Imaging Network — AFSIN (2010 – Present)</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Founding member, Sri Lankan representative, electronics and computer programming resource personnel, and webmaster (<a href="http://www.afsinnet.net" target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--accent-primary);">www.afsinnet.net</a>).
+                </p>
+              </div>
+
+              <div class="surface-card p-6">
+                <h3 class="font-display font-bold text-base mb-2" style="color: var(--text-primary);">National Technical Consultancy &amp; Extension Training</h3>
+                <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                  Technical Expert for AHEAD Document Management System (DMS) and Connect AHEAD academia-industry platform; NSF Instrument Database Working Group member; coordinator of electronics training for the Department of Meteorology.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Memberships -->
+          <div class="surface-card p-6 sm:p-7">
+            <h3 class="font-display font-bold text-lg mb-4" style="color: var(--text-primary);">Professional Memberships</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="code-chip">Institute of Physics, Sri Lanka (Member, Secretary 2016, Editor 2015)</span>
+              <span class="code-chip">Sri Lanka Association for Improving Higher Education Effectiveness (SLAIHEE)</span>
+              <span class="code-chip">Sri Lanka Association for Advancement of Science (SLAAS)</span>
+              <span class="code-chip">Computer Society Sri Lanka (CSSL)</span>
+              <span class="code-chip">Young Scientist Federation, Sri Lanka</span>
+              <span class="code-chip">Swedish Optical Society</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 5: AWARDS & CONTACT (#awards)
+    =================================================================== -->
+    <section id="page-awards" class="page-view" data-title="Awards &amp; Contact">
+      <!-- Band 1: Honours & Awards -->
+      <div class="band-primary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">01 / Recognition</span>
+          <h1 class="font-display font-extrabold text-3xl sm:text-4xl tracking-tight mt-1 mb-8" style="color: var(--text-primary);">Honours &amp; Awards</h1>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">2026</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Senate Commendation Award for Research</h2>
+                <p class="text-sm" style="color: var(--text-muted);">University of Colombo</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-primary); color: var(--accent-primary-ink);">2026</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Award for Research Excellence</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Faculty of Science, University of Colombo</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2018–19</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Award for Academic Outreach</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Faculty of Science, University of Colombo (2018, 2019)</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2013</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Best Poster Award</h2>
+                <p class="text-sm" style="color: var(--text-muted);">AFSIN International Workshop on Optical System Design, Electronics and Computerized Acquisition, Yamoussoukro, Côte d’Ivoire</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2012</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">President’s Award for Scientific Publication</h2>
+                <p class="text-sm" style="color: var(--text-muted);">National Research Council, Sri Lanka</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2012</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Distinguished Poster Award</h2>
+                <p class="text-sm" style="color: var(--text-muted);">Hands-On Research in Complex Systems School, Shanghai Jiao Tong University, China</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2011</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">National Research Council Merit Award for Scientific Publication</h2>
+                <p class="text-sm" style="color: var(--text-muted);">National Research Council, Sri Lanka</p>
+              </div>
+            </div>
+
+            <div class="surface-card p-5 flex items-start gap-4">
+              <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-md shrink-0 mt-0.5" style="background-color: var(--accent-tint); color: var(--accent-primary);">2005</span>
+              <div>
+                <h2 class="font-display font-bold text-base" style="color: var(--text-primary);">Mailvaganam Memorial Award, Gulamhusein A.J. Norbhai Gold Medal &amp; Dr D.C. Hewavitharana Memorial Prize</h2>
+                <p class="text-sm" style="color: var(--text-muted);">University of Colombo (Physics &amp; Physics Project 2000/2001)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Band 2: Contact & GitHub Pages Export -->
+      <div class="band-secondary py-12 sm:py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="lg:col-span-7 space-y-5">
+              <span class="font-mono text-xs uppercase tracking-widest font-semibold" style="color: var(--accent-secondary);">02 / Contact</span>
+              <h2 class="font-display font-bold text-2xl sm:text-3xl tracking-tight" style="color: var(--text-primary);">Get in Touch</h2>
+              <p class="text-base leading-relaxed" style="color: var(--text-muted);">
+                Prospective postgraduate researchers, academic collaborators, and colleagues are welcome to reach out via email.
+              </p>
+
+              <div class="surface-card p-6 space-y-4">
+                <div>
+                  <span class="font-mono text-xs uppercase tracking-wider block" style="color: var(--text-muted);">Academic Address</span>
+                  <strong class="font-display text-base block mt-0.5" style="color: var(--text-primary);">Hiran H E Jayaweera</strong>
+                  <span class="text-sm" style="color: var(--text-muted);">Department of Physics, University of Colombo, Colombo 00300, Sri Lanka</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t" style="border-color: var(--border-subtle);">
+                  <div>
+                    <span class="font-mono text-xs uppercase tracking-wider block" style="color: var(--text-muted);">Email</span>
+                    <div class="flex items-center gap-2 mt-1">
+                      <a href="mailto:hiran@phys.cmb.ac.lk" class="text-sm font-semibold underline" style="color: var(--accent-primary);">hiran@phys.cmb.ac.lk</a>
+                      <button type="button" id="copy-email-btn" class="font-mono text-[11px] px-2 py-0.5 rounded border cursor-pointer" style="border-color: var(--border-subtle); color: var(--text-muted);">Copy</button>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-mono text-xs uppercase tracking-wider block" style="color: var(--text-muted);">&nbsp;</span>
+                    <a href="tel:" class="text-sm font-semibold block mt-1" style="color: var(--text-primary);">&nbsp;</a>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t" style="border-color: var(--border-subtle);">
+                  <span class="font-mono text-xs uppercase tracking-wider block" style="color: var(--text-muted);">Google Scholar</span>
+                  <a href="https://scholar.google.com/citations?user=tt4CSjgAAAAJ" target="_blank" rel="noopener noreferrer" class="text-sm font-semibold inline-flex items-center gap-1 mt-1 underline" style="color: var(--accent-primary);">
+                    https://scholar.google.com/citations?user=tt4CSjgAAAAJ ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- GitHub Pages Deployment Box -->
+            <div class="lg:col-span-5">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-8" style="background-color: var(--bg-primary); border-top: 1px solid var(--border-subtle);">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm" style="color: var(--text-muted);">
+      <div>
+        <strong style="color: var(--text-primary);">© 2026 Hiran H E Jayaweera</strong> · Department of Physics, University of Colombo, Sri Lanka
+      </div>
+      <div class="flex flex-wrap items-center gap-4 font-mono text-xs">
+        <a href="mailto:hiran@phys.cmb.ac.lk" class="hover:underline" style="color: var(--accent-primary);">hiran@phys.cmb.ac.lk</a>
+        <a href="https://scholar.google.com/citations?user=tt4CSjgAAAAJ" target="_blank" rel="noopener noreferrer" class="hover:underline" style="color: var(--accent-primary);">Google Scholar ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Banner -->
+  <div id="toast-banner" class="toast-banner" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      /* 1. Toast Notification Helper */
+      var toastEl = document.getElementById('toast-banner');
+      var toastTimer = null;
+      function showToast(message) {
+        if (!toastEl) return;
+        toastEl.textContent = message;
+        toastEl.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toastEl.classList.remove('visible');
+        }, 2600);
+      }
+
+      /* 2. Hash-Based Multi-Page Router */
+      var pages = document.querySelectorAll('.page-view');
+      var navLinks = document.querySelectorAll('.nav-tab');
+
+      function navigateToHash() {
+        var rawHash = (window.location.hash || '#overview').replace('#', '');
+        var targetPage = document.getElementById('page-' + rawHash);
+        if (!targetPage) {
+          rawHash = 'overview';
+          targetPage = document.getElementById('page-overview');
+        }
+
+        pages.forEach(function (sec) {
+          sec.classList.toggle('active', sec === targetPage);
+        });
+
+        navLinks.forEach(function (link) {
+          if (link.getAttribute('href') === '#' + rawHash) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+
+        var pageTitle = targetPage.getAttribute('data-title') || 'Overview';
+        document.title = pageTitle + ' | Hiran H E Jayaweera';
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      window.addEventListener('hashchange', navigateToHash);
+      navigateToHash();
+
+      /* 3. Evening Forest Dark Mode Toggle */
+      var themeToggleBtn = document.getElementById('theme-toggle');
+      var themeLabelEl = document.getElementById('theme-label');
+
+      function syncThemeUI() {
+        var currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+          themeLabelEl.textContent = 'Warm Sandstone';
+        } else {
+          themeLabelEl.textContent = 'Evening Forest';
+        }
+      }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', function () {
+          var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          var nextTheme = isDark ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', nextTheme);
+          try {
+            localStorage.setItem('hj-sandstone-theme', nextTheme);
+          } catch (e) {}
+          syncThemeUI();
+        });
+      }
+      syncThemeUI();
+
+      /* 4. Interactive Skills Filter (#overview) */
+      var skillFilterBtns = document.querySelectorAll('.skill-filter');
+      var skillCards = document.querySelectorAll('.skill-card');
+
+      skillFilterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          skillFilterBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var cat = btn.getAttribute('data-skill-cat');
+          skillCards.forEach(function (card) {
+            if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      /* 5. Interactive Grants Role Filter (#research) */
+      var grantFilterBtns = document.querySelectorAll('.grant-filter');
+      var grantItems = document.querySelectorAll('.grant-item');
+
+      grantFilterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          grantFilterBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var role = btn.getAttribute('data-grant-role');
+          grantItems.forEach(function (item) {
+            if (role === 'all' || item.getAttribute('data-role') === role) {
+              item.style.display = '';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      /* 6. Interactive Teaching Theme Filter (#teaching) */
+      var themeFilterBtns = document.querySelectorAll('.theme-filter');
+      var themeCards = document.querySelectorAll('.theme-card');
+
+      themeFilterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          themeFilterBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var group = btn.getAttribute('data-theme-cat');
+          themeCards.forEach(function (card) {
+            if (group === 'all' || card.getAttribute('data-theme-group') === group) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      /* 7. Copy Email Utility (#awards) */
+      var copyEmailBtn = document.getElementById('copy-email-btn');
+      if (copyEmailBtn) {
+        copyEmailBtn.addEventListener('click', function () {
+          var tempInput = document.createElement('textarea');
+          tempInput.value = 'hiran@phys.cmb.ac.lk';
+          tempInput.style.position = 'fixed';
+          tempInput.style.opacity = '0';
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          try {
+            document.execCommand('copy');
+            showToast('Email copied: hiran@phys.cmb.ac.lk');
+          } catch (err) {
+            showToast('Unable to copy email');
+          }
+          document.body.removeChild(tempInput);
+        });
+      }
+
+      /* 8. Standalone HTML Export for GitHub Pages */
+      function exportStandaloneIndex() {
+        var clone = document.documentElement.cloneNode(true);
+        clone.removeAttribute('data-theme');
+
+        // Reset transient UI states on clone
+        var clonePages = clone.querySelectorAll('.page-view');
+        clonePages.forEach(function (p) { p.classList.remove('active'); });
+
+        var cloneLinks = clone.querySelectorAll('.nav-tab');
+        cloneLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
+
+        var cloneSkills = clone.querySelectorAll('.skill-card');
+        cloneSkills.forEach(function (c) { c.style.display = ''; });
+
+        var cloneGrants = clone.querySelectorAll('.grant-item');
+        cloneGrants.forEach(function (g) { g.style.display = ''; });
+
+        var cloneThemes = clone.querySelectorAll('.theme-card');
+        cloneThemes.forEach(function (t) { t.style.display = ''; });
+
+        var cloneToast = clone.querySelector('#toast-banner');
+        if (cloneToast) {
+          cloneToast.className = 'toast-banner';
+          cloneToast.textContent = '';
+        }
+
+        var htmlOutput = '<!DOCTYPE html>\n' + clone.outerHTML;
+        var blob = new Blob([htmlOutput], { type: 'text/html;charset=utf-8' });
+        var downloadUrl = URL.createObjectURL(blob);
+        var anchor = document.createElement('a');
+        anchor.href = downloadUrl;
+        anchor.download = 'index.html';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 1000);
+        showToast('Exported standalone index.html');
+      }
+
+      var exportTopBtn = document.getElementById('export-btn-top');
+      var exportFooterBtn = document.getElementById('export-btn-footer');
+      if (exportTopBtn) exportTopBtn.addEventListener('click', exportStandaloneIndex);
+      if (exportFooterBtn) exportFooterBtn.addEventListener('click', exportStandaloneIndex);
+    })();
+  </script>
+
+</body></html>
